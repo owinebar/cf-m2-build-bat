@@ -31,11 +31,11 @@ REM and cygpath will translate the explicit full path to /bin
 echo mkdir -p ${PREFIX}/Library/mingw64/bin >>test-win.sh
 echo cp -f "${PREFIX}/Library/bin"/* "${PREFIX}/Library/mingw64/bin/" >>test-win.sh
 REM Use this line for debugging the bash shell invocation
-REM echo exec bash -i >>build-win.sh
-echo exec "./%TEST_SCRIPT" >>build-win.sh
+REM echo exec bash -i >>test-win.sh
+echo exec "./%TEST_SCRIPT" >>test-win.sh
 
 echo set MSYSTEM=MINGW64 >test-win.bat
-echo "%BUILD_PREFIX%\Library\usr\bin\bash.exe" -lec "$(cygpath '%CD%\build-win.sh')"  >>test-win.bat
+echo "%BUILD_PREFIX%\Library\usr\bin\bash.exe" -lec "$(cygpath '%CD%\test-win.sh')"  >>test-win.bat
 
 REM Have to ensure only one cygwin/MSYS DLL is in use at a time
-start /B /W /I cmd /c build-win.bat
+start /B /W /I cmd /c test-win.bat
