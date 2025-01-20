@@ -17,7 +17,10 @@
 #     You should have received a copy of the GNU Affero General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-1 i set -x
+1 {
+    i set -x
+    i export CONDA_AUTO_ACTIVATE_BASE=false
+}
 : start
 # We only attempt to convert batch files produced by conda build
 /^set\s+".*"$/ {
