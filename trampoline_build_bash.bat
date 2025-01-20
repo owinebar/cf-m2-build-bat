@@ -1,4 +1,5 @@
-REM    bld.bat - Build batch file for "conda build" on win-64 trampolining to m2-bash
+REM    trampoline_build_bash.bat - Build batch file for "conda build"
+REM                                on win-64 trampolining to m2-bash
 REM    Copyright 2025 Onnie Lynn Winebarger
 REM    This program is free software: you can redistribute it and/or modify
 REM    it under the terms of the GNU Affero General Public License as published
@@ -15,7 +16,7 @@ REM    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 REM 
 
 set BUILD_SCRIPT="%1"
-if "%BUILD_SCRIPT%" == "" set "BUILD_SCRIPT=test.sh"
+if "%BUILD_SCRIPT%" == "" set "BUILD_SCRIPT=build.sh"
 
 sed -Enf "%0\..\win_build_env.sed" <build_env_setup.bat >build_env_setup.sh
 echo #!/bin/bash >build-win.sh

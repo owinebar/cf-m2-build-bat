@@ -1,4 +1,5 @@
-REM    test.bat - Build batch file for "conda build" on win-64 trampolining to m2-bash
+REM    trampoline_test_bash.bat - Build batch file for "conda build"
+REM                               on win-64 trampolining to m2-bash
 REM    Copyright 2025 Onnie Lynn Winebarger
 REM    This program is free software: you can redistribute it and/or modify
 REM    it under the terms of the GNU Affero General Public License as published
