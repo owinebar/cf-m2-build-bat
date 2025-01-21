@@ -15,7 +15,7 @@ REM    You should have received a copy of the GNU Affero General Public License
 REM    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 REM 
 
-set TEST_SCRIPT="%1"
+set "TEST_SCRIPT=%1"
 if "%TEST_SCRIPT%" == "" set "TEST_SCRIPT=./test.sh"
 
 
