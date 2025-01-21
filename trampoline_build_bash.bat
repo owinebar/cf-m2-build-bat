@@ -18,7 +18,7 @@ REM
 set BUILD_SCRIPT="%1"
 if "%BUILD_SCRIPT%" == "" set "BUILD_SCRIPT=build.sh"
 
-sed -Enf "%0\..\cb_build_env_bat2sh.sed" <build_env_setup.bat >build_env_setup.sh
+sed -Enf "%~dp0cb_build_env_bat2sh.sed" <build_env_setup.bat >build_env_setup.sh
 echo #!/bin/bash >build-win.sh
 echo cd $(cygpath '%CD%') >>build-win.sh
 echo export MSYSTEM=MINGW64 >>build-win.sh
