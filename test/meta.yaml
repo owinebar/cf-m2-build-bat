@@ -23,4 +23,4 @@ test:
   files:
     - test.sh
   commands:
-    - test.bat
+    - CALL trampoline_test_bash.bat test.sh
