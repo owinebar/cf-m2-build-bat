@@ -17,5 +17,7 @@ requirements:
 test:
   requirements:
     - cf-m2-build-bat
+  files:
+    - test.sh
   commands:
     - test.bat
