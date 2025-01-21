@@ -21,6 +21,7 @@ if "%TEST_SCRIPT%" == "" set "TEST_SCRIPT=./test.sh"
 
 sed -Enf "%~dp0conda_test_env_bat2sh.sed" <conda_test_env_vars.bat >conda_test_env_vars.sh
 echo #!/bin/bash >test-win.sh
+echo set -x >>test-win.sh
 echo cd $(cygpath '%CD%') >>test-win.sh
 echo export MSYSTEM=MINGW64 >>test-win.sh
 echo . /etc/msystem >>test-win.sh
