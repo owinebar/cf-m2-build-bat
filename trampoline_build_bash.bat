@@ -26,7 +26,7 @@ echo . /etc/msystem >>build-win.sh
 echo . build_env_setup.sh >>build-win.sh
 REM Use this line for debugging the bash shell invocation
 REM echo exec bash -i >>build-win.sh
-echo exec "./%BUILD_SCRIPT" >>build-win.sh
+echo exec "./%BUILD_SCRIPT%" >>build-win.sh
 
 echo set MSYSTEM=MINGW64 >build-win.bat
 echo "%BUILD_PREFIX%\Library\usr\bin\bash.exe" -lec "$(cygpath '%CD%\build-win.sh')"  >>build-win.bat
