@@ -1,0 +1,21 @@
+
+package:
+  name: cf-m2-build-bat-test
+  version: "1"
+
+source:
+  path: test-cf-m2-build-bat.sh
+  
+build:
+  number: 0
+  skip: True  # [not win]
+  
+requirements:
+  build:
+    - cf-m2-build-bat
+
+test:
+  requirements:
+    - cf-m2-build-bat
+  commands:
+    - test.bat
