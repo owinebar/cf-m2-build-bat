@@ -33,7 +33,8 @@ echo mkdir -p ${PREFIX}/Library/mingw64/bin >>test-win.sh
 echo cp -f "${PREFIX}/Library/bin"/* "${PREFIX}/Library/mingw64/bin/" >>test-win.sh
 REM Use this line for debugging the bash shell invocation
 REM echo exec bash -i >>test-win.sh
-echo exec "$(cygpath '%TEST_SCRIPT%')" >>test-win.sh
+echo TEST_SCRIPT=%TEST_SCRIPT% >>test-win.sh
+echo exec "$(cygpath "${TEST_SCRIPT}")" >>test-win.sh
 
 echo set MSYSTEM=MINGW64 >test-win.bat
 echo "%PREFIX%\Library\usr\bin\bash.exe" -lec "$(cygpath '%CD%\test-win.sh')"  >>test-win.bat
