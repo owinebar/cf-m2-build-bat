@@ -13,6 +13,9 @@ build:
 requirements:
   build:
     - cf-m2-build-bat
+  run:
+    - m2-base
+    - m2-bash
 
 test:
   requirements:
