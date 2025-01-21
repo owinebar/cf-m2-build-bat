@@ -16,7 +16,7 @@ REM    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 REM 
 
 set TEST_SCRIPT="%1"
-if "%TEST_SCRIPT%" == "" set "TEST_SCRIPT=test.sh"
+if "%TEST_SCRIPT%" == "" set "TEST_SCRIPT=./test.sh"
 
 
 sed -Enf "%~dp0conda_test_env_bat2sh.sed" <conda_test_env_vars.bat >conda_test_env_vars.sh
@@ -32,10 +32,10 @@ echo mkdir -p ${PREFIX}/Library/mingw64/bin >>test-win.sh
 echo cp -f "${PREFIX}/Library/bin"/* "${PREFIX}/Library/mingw64/bin/" >>test-win.sh
 REM Use this line for debugging the bash shell invocation
 REM echo exec bash -i >>test-win.sh
-echo exec "./%TEST_SCRIPT%" >>test-win.sh
+echo exec "$(cygpath '%TEST_SCRIPT%')" >>test-win.sh
 
 echo set MSYSTEM=MINGW64 >test-win.bat
-echo "%BUILD_PREFIX%\Library\usr\bin\bash.exe" -lec "$(cygpath '%CD%\test-win.sh')"  >>test-win.bat
+echo "%PREFIX%\Library\usr\bin\bash.exe" -lec "$(cygpath '%CD%\test-win.sh')"  >>test-win.bat
 
 REM Have to ensure only one cygwin/MSYS DLL is in use at a time
 start /B /W /I cmd /c test-win.bat

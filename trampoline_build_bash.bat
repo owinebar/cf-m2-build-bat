@@ -16,7 +16,7 @@ REM    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 REM 
 
 set BUILD_SCRIPT="%1"
-if "%BUILD_SCRIPT%" == "" set "BUILD_SCRIPT=build.sh"
+if "%BUILD_SCRIPT%" == "" set "BUILD_SCRIPT=./build.sh"
 
 sed -Enf "%~dp0cb_build_env_bat2sh.sed" <build_env_setup.bat >build_env_setup.sh
 echo #!/bin/bash >build-win.sh
@@ -26,7 +26,7 @@ echo . /etc/msystem >>build-win.sh
 echo . build_env_setup.sh >>build-win.sh
 REM Use this line for debugging the bash shell invocation
 REM echo exec bash -i >>build-win.sh
-echo exec "./%BUILD_SCRIPT%" >>build-win.sh
+echo exec "$(cygpath '%BUILD_SCRIPT%')" >>build-win.sh
 
 echo set MSYSTEM=MINGW64 >build-win.bat
 echo "%BUILD_PREFIX%\Library\usr\bin\bash.exe" -lec "$(cygpath '%CD%\build-win.sh')"  >>build-win.bat
