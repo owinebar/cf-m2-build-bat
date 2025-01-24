@@ -23,4 +23,4 @@ test:
   files:
     - test.sh
   commands:
-    - CALL trampoline_test_bash.bat "%CD%\test.sh"
+    - CALL trampoline_test_bash.bat MINGW64 "./test.sh"
