@@ -15,22 +15,28 @@ REM    You should have received a copy of the GNU Affero General Public License
 REM    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 REM 
 
-set "BUILD_SCRIPT=%1"
+set "MSYSTEM=%~1"
+if "%MSYSTEM%" == "" set "MSYSTEM=MINGW64"
+set "BUILD_SCRIPT=%~2"
 if "%BUILD_SCRIPT%" == "" set "BUILD_SCRIPT=./build.sh"
 
 sed -Enf "%~dp0cb_build_env_bat2sh.sed" <build_env_setup.bat >build_env_setup.sh
+
 echo #!/bin/bash >build-win.sh
 echo set -x >>build-win.sh
-echo cd $(cygpath '%CD%') >>build-win.sh
-echo export MSYSTEM=MINGW64 >>build-win.sh
+REM echo cd $(cygpath '%CD%') >>build-win.sh
+echo export MSYSTEM=%MSYSTEM% >>build-win.sh
 echo . /etc/msystem >>build-win.sh
 echo . build_env_setup.sh >>build-win.sh
+echo export HOST_PREFIX="${PREFIX}" >>build-win.sh
+echo export PREFIX="${MSYSTEM_PREFIX}" >>build-win.sh
+echo BUILD_SCRIPT="%BUILD_SCRIPT%" >>build-win.sh
 REM Use this line for debugging the bash shell invocation
 REM echo exec bash -i >>build-win.sh
-echo BUILD_SCRIPT=%BUILD_SCRIPT% >>build-win.sh
 echo exec "$(cygpath "${BUILD_SCRIPT}")" >>build-win.sh
 
-echo set MSYSTEM=MINGW64 >build-win.bat
+echo set MSYSTEM=%MSYSTEM% >build-win.bat
+echo set CHERE_INVOKING=1 >>build-win.bat
 echo "%BUILD_PREFIX%\Library\usr\bin\bash.exe" -lec "$(cygpath '%CD%\build-win.sh')"  >>build-win.bat
 
 REM Have to ensure only one cygwin/MSYS DLL is in use at a time
