@@ -31,11 +31,11 @@ echo . /etc/msystem >>test-win.sh
 echo . conda_test_env_vars.sh >>test-win.sh
 echo export HOST_PREFIX="${PREFIX}" >>test-win.sh
 echo export PREFIX="${MSYSTEM_PREFIX}" >>test-win.sh
-REM This is such a hack, but installing binaries in $PREFIX/Library/bin is incorrect
+REM This is such a hack, but installing binaries in $HOST_PREFIX/Library/bin is incorrect
 REM for MSYS-based shells, as MSYS-2.0.dll will treat it as non-existent when referenced as /bin,
 REM and cygpath will translate the explicit full path to /bin
-echo mkdir -p ${PREFIX}/Library/mingw64/bin >>test-win.sh
-echo cp -f "${PREFIX}/Library/bin"/* "${PREFIX}/Library/mingw64/bin/" >>test-win.sh
+echo mkdir -p ${HOST_PREFIX}/Library/mingw64/bin >>test-win.sh
+echo cp -n "${HOST_PREFIX}/Library/bin"/* "${HOST_PREFIX}/Library/mingw64/bin/" >>test-win.sh
 REM Use this line for debugging the bash shell invocation
 REM echo exec bash -i >>test-win.sh
 echo TEST_SCRIPT="%TEST_SCRIPT%" >>test-win.sh
