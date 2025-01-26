@@ -29,7 +29,7 @@ echo export MSYSTEM=%MSYSTEM% >>build-win.sh
 echo . /etc/msystem >>build-win.sh
 echo . build_env_setup.sh >>build-win.sh
 echo export HOST_PREFIX="${PREFIX}" >>build-win.sh
-echo export PREFIX="${MSYSTEM_PREFIX}" >>build-win.sh
+echo export PREFIX="$(cygpath "${HOST_PREFIX}")/Library${MSYSTEM_PREFIX}" >>build-win.sh
 echo BUILD_SCRIPT="%BUILD_SCRIPT%" >>build-win.sh
 REM Use this line for debugging the bash shell invocation
 REM echo exec bash -i >>build-win.sh
