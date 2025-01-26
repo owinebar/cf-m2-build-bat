@@ -1,0 +1,74 @@
+{% set version = "6.3.0" %}
+{% if build_platform is undefined %}
+{% set build_platform = "linux-64" %}
+{% endif %}
+{% set posix = "m2-" if build_platform.startswith("win-") else '' %}
+
+package:
+  name: gmp
+  version: {{ version }}
+
+source:
+  url:
+    - https://gmplib.org/download/gmp/gmp-{{ version }}.tar.xz
+    - https://ftp.gnu.org/gnu/gmp/gmp-{{ version }}.tar.xz
+  sha256: a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898
+
+build:
+  number: 2
+  skip: True  # [not win]
+  run_exports:
+    - {{ pin_subpackage("gmp") }}
+  script: CALL trampoline_build_bash.bat MINGW64 "%RECIPE_DIR%\build.sh"  # [win]
+
+requirements:
+  build:
+    - cf-m2-build-bat  # [win]
+    - gnuconfig
+    - {{ stdlib('c') }}  # [not win]
+    - {{ compiler('c') }}  # [not win]
+    - {{ compiler('cxx') }}  # [not win]
+    - {{ stdlib('m2w64_c') }} # [win]
+    - {{ compiler('m2w64_c') }} # [win]
+    - {{ compiler('m2w64_cxx') }} # [win]
+    - {{ posix }}m4
+    - {{ posix }}make
+    - m2-base       # [win]
+    - m2-diffutils  # [win]
+    - gendef        # [win]
+  host:
+  run_constrained:
+    - mpir <0.0a0  # [win]
+
+test:
+  requires:
+    - {{ compiler('c') }}        # [not win]
+    - {{ stdlib('c') }}          # [not win]
+    - {{ stdlib('m2w64_c') }}    # [win]
+    - {{ compiler('m2w64_c') }}  # [win]
+    - cf-m2-build-bat            # [win]
+  files:
+    - test.c
+    - test_win.sh   # [win]
+    - test_unix.sh  # [unix]
+  commands:
+    - test ! -f ${PREFIX}/lib/libgmp.a      # [unix]
+    - test -f ${PREFIX}/lib/libgmp.dylib    # [osx]
+    - test -f ${PREFIX}/lib/libgmp.so       # [linux]
+    - test ! -f ${PREFIX}/lib/libgmpxx.a    # [unix]
+    - test -f ${PREFIX}/lib/libgmpxx.dylib  # [osx]
+    - test -f ${PREFIX}/lib/libgmpxx.so     # [linux]
+    - ./test_unix.sh                        # [unix]
+    - CALL trampoline_test_bash.bat MINGW64 "./test_win.sh"  # [win]
+
+about:
+  home: http://gmplib.org/
+  license: GPL-2.0-or-later OR LGPL-3.0-or-later
+  license_file: COPYING.LESSERv3
+  summary: The GNU multiprecision library.
+
+extra:
+  recipe-maintainers:
+    - asmeurer
+    - isuruf
+    - jakirkham
