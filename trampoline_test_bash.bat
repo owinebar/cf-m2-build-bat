@@ -22,7 +22,7 @@ set "TEST_SCRIPT=%~2"
 if "%TEST_SCRIPT%" == "" set "TEST_SCRIPT=./test.sh"
 
 
-sed -Enf "%~dp0conda_test_env_bat2sh.sed" <conda_test_env_vars.bat >conda_test_env_vars.sh
+sed -Enf "%~dp0cb_test_env_bat2sh.sed" <conda_test_env_vars.bat >conda_test_env_vars.sh
 echo #!/bin/bash >test-win.sh
 echo set -x >>test-win.sh
 REM echo cd $(cygpath '%CD%') >>test-win.sh
