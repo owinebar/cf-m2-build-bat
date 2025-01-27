@@ -50,7 +50,7 @@ test:
   files:
     - test.c
     - test_win.sh   # [win]
-    - test_unix.sh  # [unix]
+    - test_unix.sh  
   commands:
     - test ! -f ${PREFIX}/lib/libgmp.a      # [unix]
     - test -f ${PREFIX}/lib/libgmp.dylib    # [osx]
