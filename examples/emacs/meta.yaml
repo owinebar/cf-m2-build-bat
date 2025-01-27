@@ -42,6 +42,8 @@ build:
     - lib/emacs/jit/bin/*
     - lib/emacs/jit/lib/*
   script: CALL trampoline_build_bash.bat MINGW64 "%RECIPE_DIR%\build.sh"  # [win]
+  # for cf-m2-build-bat example
+  skip: True  # [not win]
 
 
 requirements:
