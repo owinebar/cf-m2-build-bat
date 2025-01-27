@@ -160,7 +160,7 @@ requirements:
     - ucrt # [win]
     
 test:
-  source_files:
+  files:
     - test.sh
     - test_jit.sh  # [linux]
   requirements:
