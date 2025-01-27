@@ -1,4 +1,4 @@
-set -x
+set -evx
 
 source $RECIPE_DIR/get_cpu_arch.sh
 
@@ -90,6 +90,7 @@ case "$(uname)" in
 		
 		# just let configure decide, except for the prefix, for now
 		export OPTS=""
+		;;
     *)
 		# linux special case code to build libgccjit
 		build_gccjit
