@@ -1,0 +1,182 @@
+# Note: This recipe currently only works on OS X and Linux.
+{% if build_platform is undefined %}
+{% set build_platform = "linux-64" %}
+{% endif %}
+{% set posix = "m2-" if build_platform.startswith("win-") else '' %}
+
+{% set version = "29.4" %}
+
+# Version of GCC sources used to build the embedded JIT compiler
+{% set gcc_version = "14.2.0" %}
+
+package:
+  name: emacs
+  version: {{ version }}
+
+source:
+  - fn: emacs-{{ version }}.tar.xz
+    url: http://ftp.gnu.org/gnu/emacs/emacs-{{ version }}.tar.xz
+    sha256: ba897946f94c36600a7e7bb3501d27aa4112d791bfe1445c61ed28550daca235
+    patches:
+      - 0001-disable-sanity-check.patch  # [(osx and build_platform != target_platform) or win]
+      - 0002-apple-silicon-resign-binary.patch  # [osx]
+      - 0003-macos-cross-compile-configure.patch  # [osx and build_platform != target_platform]
+      - 0004-macos-cross-compile-makefile.patch  # [osx and build_platform != target_platform]
+      - 0005-macos-cross-compile-nextstep-makefile.patch  # [osx and build_platform != target_platform]
+      - 0006-macos-cross-compile-post-install-pdump-path.patch  # [osx and build_platform != target_platform]
+      - 0007-macos-cross-compile-lisp-makefile.patch  # [osx and build_platform != target_platform]
+      - mingw-w64-emacs/001-ucrt.patch # [win]
+      - mingw-w64-emacs/002-clang-fixes.patch # [win]
+      - mingw-w64-emacs/003-aarch64-fixes.patch # [win]
+      - mingw-w64-emacs/004-libtree-sitter.patch # [win]
+      - ignore_gnutls.patch # [win]
+  - fn: gcc-{{ gcc_version }}.tar.xz  # [linux]
+    url: https://ftp.gnu.org/gnu/gcc/gcc-{{ gcc_version }}/gcc-{{ gcc_version }}.tar.xz  # [linux]
+    sha256: a7b39bc69cbf9e25826c5a60ab26477001f7c08d85cec04bc0e29cabed6f3cc9  # [linux]
+    folder: gcc  # [linux]
+
+
+build:
+  number: 1
+  ignore_prefix_files:
+    - lib/emacs/jit/bin/*
+    - lib/emacs/jit/lib/*
+  script: CALL trampoline_build_bash.bat MINGW64 "%RECIPE_DIR%\build.sh"  # [win]
+
+
+requirements:
+  build:
+    - {{ posix }}pkg-config 
+    - gnuconfig  
+    - {{ compiler('c') }} # [not win]
+    - {{ stdlib("c") }} # [not win]
+    - {{ compiler('m2w64_c') }} # [win]
+    - {{ stdlib('m2w64_c') }} # [win]
+    - cf-m2-build-bat  # [win]
+    - m2-base # [win]
+    - {{ posix }}autoconf 
+    - automake  # [unix]
+    - m2-automake-wrapper # [win]
+    - {{ posix }}m4 
+    - {{ posix }}make
+    - {{ posix }}texinfo 
+    - gtk3  # [build_platform != target_platform and not win]
+    - harfbuzz  # [build_platform != target_platform or win]
+    - libxml2  # [build_platform != target_platform or win]
+    - {{ posix }}ncurses  # [build_platform != target_platform and not win]
+    - dbus  # [build_platform != target_platform and not win]
+    - libjpeg-turbo   # [build_platform != target_platform or win]
+    - libpng  # [build_platform != target_platform or win]
+    - libtiff  # [build_platform != target_platform or win]
+    - librsvg  # [build_platform != target_platform or win]
+    - giflib  # [build_platform != target_platform or win]
+    - gnutls  # [build_platform != target_platform and not win]
+    - gmp  # [build_platform != target_platform or win]
+    - glib  # [build_platform != target_platform or win]
+    - zlib  # [build_platform != target_platform or win]
+    - liblzma-devel
+    - libtree-sitter
+    - jansson
+    - ctags
+
+  host:
+    - {{ stdlib("c") }}  # [linux]
+    - binutils  # [linux]
+    - libxml2
+    - {{ posix }}ncurses 
+    - m2-msys2-launcher # [win]
+    - dbus  # [osx]
+    - libjpeg-turbo
+    - libpng
+    - libtiff
+    - liblzma-devel
+    - librsvg
+    - giflib
+    - gnutls # [not win]
+    - gmp
+    - mpc  # [linux]
+    - mpfr  # [linux]
+    - glib
+    - freetype  # [linux or win]
+    - cairo  # [linux or win]
+    - gtk3  # [linux]
+    - harfbuzz  # [linux or win]
+    - xorg-libxaw  # [linux or win]
+    - xorg-libxpm  # [linux or win]
+    - xorg-libxfixes  # [linux or win]
+    - xorg-libxft  # [linux]
+    - xorg-libxi  # [linux or win]
+    - xorg-libxrandr  # [linux or win]
+    - xorg-libxcursor  # [linux or win]
+    - xorg-libxcomposite  # [linux or win]
+    - xorg-libxdamage  # [linux or win]
+    - xorg-libxinerama  # [linux or win]
+    - xorg-xorgproto  # [linux or win]
+    - xorg-xineramaproto  # [win]
+    - xorg-libxtst  # [linux or win]
+    - zlib
+    - libtree-sitter
+    - jansson
+    - ucrt # [win]
+    - {{ compiler('m2w64_c') }} # [win]
+    - {{ stdlib('m2w64_c') }} # [win]
+    
+
+  run:
+    - binutils  # [linux]
+    - libxml2
+    - {{ posix }}ncurses
+    - dbus  # [osx]
+    - libjpeg-turbo
+    - libpng
+    - libtiff
+    - giflib
+    - gnutls # [not win]
+    - gmp
+    - glib
+    - freetype  # [linux or win]
+    - cairo  # [linux or win]
+    - gtk3  # [linux]
+    - harfbuzz  # [linux or win]
+    - xorg-libxaw  # [linux or win]
+    - xorg-libxpm  # [linux or win]
+    - xorg-libxfixes  # [linux or win]
+    - xorg-libxft  # [linux]
+    - xorg-libxi  # [linux or win]
+    - xorg-libxrandr  # [linux or win]
+    - xorg-libxcursor  # [linux or win]
+    - xorg-libxcomposite  # [linux or win]
+    - xorg-libxdamage  # [linux or win]
+    - xorg-libxinerama  # [linux or win]
+    - xorg-xineramaproto  # [win]
+    - xorg-xorgproto  # [linux or win]
+    - xorg-libxtst  # [linux or win]
+    - zlib
+    - libtree-sitter
+    - jansson
+    - {{ posix }}texinfo
+    - ucrt # [win]
+    
+test:
+  source_files:
+    - test.sh
+    - test_jit.sh  # [linux]
+  requirements:
+    - cf-m2-build-bat  # [win]
+  commands:
+    - ./test.sh      # [unix]
+    - ./test_jit.sh  # [linux]
+    - CALL trampoline_test_bash.bat MINGW64 "./test.sh"  # [win]
+
+about:
+  home: http://www.gnu.org/software/emacs/
+  license: GPL-3.0-only
+  summary: GNU Emacs is an extensible, customizable text editor.
+  license_file: COPYING
+
+extra:
+  recipe-maintainers:
+    - asmeurer
+    - jmakovicka
+    - msarahan
+    - notestaff
