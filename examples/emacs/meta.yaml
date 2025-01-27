@@ -163,7 +163,7 @@ test:
   files:
     - test.sh
     - test_jit.sh  # [linux]
-  requirements:
+  requires:
     - cf-m2-build-bat  # [win]
   commands:
     - ./test.sh      # [unix]

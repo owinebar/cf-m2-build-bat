@@ -89,7 +89,10 @@ case "$(uname)" in
 		CFLAGS+=" -Wno-error=implicit-function-declaration"
 		
 		# just let configure decide, except for the prefix, for now
-		export OPTS=""
+		export OPTS=" "
+		# note - configure relies on pkg-config for detecting tree-sitter, but the libtree-sitter package does not provide
+		#        any settings through pkg-config
+		#       so libtree-sitter is not currently detected or supported
 		;;
     *)
 		# linux special case code to build libgccjit
