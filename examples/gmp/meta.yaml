@@ -47,6 +47,7 @@ test:
     - {{ stdlib('m2w64_c') }}    # [win]
     - {{ compiler('m2w64_c') }}  # [win]
     - cf-m2-build-bat            # [win]
+  files:
     - test.c
     - test_win.sh   # [win]
     - test_unix.sh  # [unix]
